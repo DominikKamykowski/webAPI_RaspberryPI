@@ -8,7 +8,8 @@ class Displays(Enum):
     HDMI0 = 2
     Composite = 3
     HDMI1 = 7
-
+    
+    
 vc = Vcgencmd()
 
 class Mainteance:
