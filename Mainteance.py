@@ -12,7 +12,7 @@ class Displays(Enum):
 vc = Vcgencmd()
 
 class Mainteance:
-
+    
     def getTemperature(self):
         return vc.measure_temp()
 
@@ -42,4 +42,4 @@ class Mainteance:
         data.update({Displays.HDMI0.name : vc.display_power_state(Displays.HDMI0.value)})
         data.update({Displays.Composite.name : vc.display_power_state(Displays.Composite.value)})
         data.update({Displays.HDMI1.name : vc.display_power_state(Displays.HDMI1.value)})
-        return json
+        return data
