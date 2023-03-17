@@ -15,7 +15,7 @@ async def volts():
 	
 @app.get("/mainteance/clock")
 async def clock():
-	return {"cpu clock" : mainteance.getClock()}
+	return mainteance.getClock()
 	
 @app.get("/mainteance/display")
 async def display():
