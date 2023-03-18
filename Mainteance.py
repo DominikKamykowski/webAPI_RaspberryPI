@@ -1,6 +1,8 @@
 from vcgencmd import Vcgencmd
 from enum import Enum
+from datetime import datetime
 import json
+import psutil
 
 class Displays(Enum):
     MainLCD = 0
@@ -42,4 +44,32 @@ class Mainteance:
         data.update({Displays.HDMI0.name : vc.display_power_state(Displays.HDMI0.value)})
         data.update({Displays.Composite.name : vc.display_power_state(Displays.Composite.value)})
         data.update({Displays.HDMI1.name : vc.display_power_state(Displays.HDMI1.value)})
+        return data
+        
+    def getCpuUsage(self):
+        data = {"Cpu usage" : psutil.cpu_percent()}
+        return data
+
+    def getLoadAvg(self):
+        data = {"Load average" : psutil.getloadavg()}
+        return data
+        
+    def getVirtualMemory(self):
+        data = {"Virtual memory" : psutil.virtual_memory()}
+        return data
+        
+    def getDiskUsage(self):
+        data = {"Disk usage" : psutil.disk_usage("/")}
+        return data
+        
+    def getNetworkConnections(self):
+        data = {"Network connections" : psutil.net_connections()}
+        return data
+
+    def getCurrentUsers(self):
+        data = {"Connected users" : psutil.users()}
+        return data
+
+    def getDateTime(self):
+        data = {"Server time" : datetime.today().strftime('%Y-%m-%d %H:%M:%S')}
         return data
