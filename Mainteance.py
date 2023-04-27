@@ -73,3 +73,18 @@ class Mainteance:
     def getDateTime(self):
         data = {"Server time" : datetime.today().strftime('%Y-%m-%d %H:%M:%S')}
         return data
+        
+    def getFullMainteance(self):
+        data = {}
+        data.update({"cpu temperature" : self.getTemperature()})
+        data.update({"cpu volts" : self.getVolts()})
+        data.update({"clocks" : self.getClock()})
+        data.update({"displays" : self.getDisplay()})
+        data.update({"Cpu usage" : self.getCpuUsage()})
+        data.update({"Load average" : self.getLoadAvg()})
+        data.update({"Virtual memory" : self.getVirtualMemory()})
+        data.update({"Disk usage" : self.getDiskUsage()})
+        data.update({"Time" : self.getDateTime()})
+
+
+        return data
