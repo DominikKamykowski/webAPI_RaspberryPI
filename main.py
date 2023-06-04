@@ -1,8 +1,33 @@
 from fastapi import FastAPI
 from Mainteance import Mainteance
+import threading
+import time
+import board
+import busio
+from adafruit_bme280 import basic as adafruit_bme280
 
 app = FastAPI()
 mainteance = Mainteance()
+sensor_value = None
+
+def read_sensor():
+    global sensor_value
+    i2c = busio.I2C(board.SCL, board.SDA)
+    bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c, address=0x76)
+
+    while True:
+        temperature = bme280.temperature
+        humidity = bme280.humidity
+        pressure = bme280.pressure
+
+        sensor_value = {
+            "temperature": temperature,
+            "humidity": humidity,
+            "pressure": pressure
+        }
+
+        #print("Odczytuję dane z czujnika BME280...")
+        time.sleep(1)
 
 
 @app.get("/mainteance/temperature")
@@ -53,4 +78,13 @@ async def datetime():
 async def getMainteance():
 	return {"Full":mainteance.getFullMainteance()}
 	
+@app.get("/sensors/bme280")
+async def get_sensor_value():
+    global sensor_value
+    if sensor_value is not None:
+        return sensor_value
+    else:
+        return {"message": "Brak dostępnych danych z czujnika."}
 
+sensor_thread = threading.Thread(target=read_sensor)
+sensor_thread.start()
