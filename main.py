@@ -4,7 +4,7 @@ import threading
 import time
 import board
 import busio
-import adafruit_bme280
+from adafruit_bme280 import basic as adafruit_bme280
 
 app = FastAPI()
 mainteance = Mainteance()
@@ -13,7 +13,7 @@ sensor_value = None
 def read_sensor():
     global sensor_value
     i2c = busio.I2C(board.SCL, board.SDA)
-    bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c)
+    bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c, address=0x76)
 
     while True:
         temperature = bme280.temperature
@@ -27,7 +27,7 @@ def read_sensor():
         }
 
         #print("Odczytuję dane z czujnika BME280...")
-        time.sleep(2)
+        time.sleep(1)
 
 
 @app.get("/mainteance/temperature")
