@@ -21,6 +21,7 @@ def read_sensor():
         pressure = bme280.pressure
 
         sensor_value = {
+            "sensor" : "BME280",
             "temperature": temperature,
             "humidity": humidity,
             "pressure": pressure
@@ -84,7 +85,8 @@ async def get_sensor_value():
     if sensor_value is not None:
         return sensor_value
     else:
-        return {"message": "Brak dostępnych danych z czujnika."}
+        return {"Error message": "Brak dostępnych danych z czujnika."}
+    
 
 sensor_thread = threading.Thread(target=read_sensor)
 sensor_thread.start()
