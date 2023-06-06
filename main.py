@@ -106,7 +106,7 @@ async def get_sensor_value():
     if sensor_value is not None:
         return sensor_value
     else:
-        return {"Error message": "Brak dostępnych danych z czujnika."}
+        return {"Error message": "Brak dostępnych danych z czujnika BME280."}
     
 @app.get("/sensors/gps")
 async def get_gps_value():
