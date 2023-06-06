@@ -21,10 +21,12 @@ def read_sensor():
         pressure = bme280.pressure
 
         sensor_value = {
-            "sensor" : "BME280",
-            "temperature": temperature,
-            "humidity": humidity,
-            "pressure": pressure
+            "BME280" : 
+	        {
+		        "temperature": temperature,
+                "humidity": humidity,
+                "pressure": pressure
+	        }
         }
 
         #print("Odczytuję dane z czujnika BME280...")
