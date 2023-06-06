@@ -108,6 +108,13 @@ async def get_sensor_value():
     else:
         return {"Error message": "Brak dostępnych danych z czujnika."}
     
+@app.get("/sensors/gps")
+async def get_gps_value():
+    global GPS_value
+    if GPS_value is not None:
+        return GPS_value
+    else:
+        return {"Error message": "Brak dostępnych danych z GPS."}
 
 
 
