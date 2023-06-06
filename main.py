@@ -9,6 +9,25 @@ from adafruit_bme280 import basic as adafruit_bme280
 app = FastAPI()
 mainteance = Mainteance()
 sensor_value = None
+GPS_value = None
+
+def read_GPS():
+    global GPS_value
+    while True:
+        longtitude = None
+        latitude =  None
+        altitude = None
+
+        GPS_value = {
+            "GPS" : 
+	        {
+		        "longtitude": longtitude,
+                "latitude": latitude,
+                "altitude": altitude
+	        }
+        }
+
+        time.sleep(1)
 
 def read_sensor():
     global sensor_value
@@ -89,6 +108,18 @@ async def get_sensor_value():
     else:
         return {"Error message": "Brak dostępnych danych z czujnika."}
     
+@app.get("/sensors/gps")
+async def get_gps_value():
+    global GPS_value
+    if GPS_value is not None:
+        return GPS_value
+    else:
+        return {"Error message": "Brak dostępnych danych z GPS."}
+
+
 
 sensor_thread = threading.Thread(target=read_sensor)
 sensor_thread.start()
+
+gps_thread = threading.Thread(target=read_GPS)
+gps_thread.start()
