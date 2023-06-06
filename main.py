@@ -5,6 +5,9 @@ import time
 import board
 import busio
 from adafruit_bme280 import basic as adafruit_bme280
+import gps
+import serial
+
 
 app = FastAPI()
 mainteance = Mainteance()
@@ -12,8 +15,10 @@ sensor_value = None
 GPS_value = None
 
 def read_GPS():
+    ser = serial.Serial('dev/ttySerial0', 9600, timeout=1)
     global GPS_value
     while True:
+	
         longtitude = None
         latitude =  None
         altitude = None
@@ -51,6 +56,12 @@ def read_sensor():
         #print("Odczytuję dane z czujnika BME280...")
         time.sleep(1)
 
+
+@app.on_event('shutdown')
+def shutdown_event():
+	print('Shutting down...')
+	sensor_thread.join()
+	gps_thread.join()
 
 @app.get("/mainteance/temperature")
 async def temperature():
