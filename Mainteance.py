@@ -46,9 +46,13 @@ class Mainteance:
         return data
         
     def getCpuUsage(self):
-        data = {"Cpu usage" : psutil.cpu_percent()}
-        return data
-
+        _data = psutil.cpu_percent()
+        if(_data > 100):
+            return None
+        else:
+            data = {"Cpu usage" : _data}
+            return data
+    
     def getLoadAvg(self):
         data = {"Load average" : psutil.getloadavg()}
         return data
@@ -84,6 +88,4 @@ class Mainteance:
         data.update({"Virtual memory" : self.getVirtualMemory()})
         data.update({"Disk usage" : self.getDiskUsage()})
         data.update({"Time" : self.getDateTime()})
-
-
         return data
