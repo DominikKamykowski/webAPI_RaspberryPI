@@ -25,7 +25,6 @@ class Mainteance:
         clockData = {}
         clockData.update({'ARM cores' : vc.measure_clock('arm')})
         clockData.update({'VC4 scaler cores' : vc.measure_clock('core')})
-        #clockData.update({'H264' : vc.measure_clock("H264")})
         clockData.update({'Image Signal Processor' : vc.measure_clock('isp')})
         clockData.update({'3D block' : vc.measure_clock('v3d')})
         clockData.update({'UART' : vc.measure_clock('uart')})
