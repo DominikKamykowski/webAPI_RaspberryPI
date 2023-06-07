@@ -10,6 +10,7 @@ app = FastAPI()
 mainteance = Mainteance()
 sensor_value = None
 GPS_value = None
+Error_message = {"Error message": "Błąd pobrania danych z systemu"}
 
 def read_GPS():
     global GPS_value
@@ -54,19 +55,35 @@ def read_sensor():
 
 @app.get("/mainteance/temperature")
 async def temperature():
-	return {"cpu temperature" : mainteance.getTemperature()}
+	data = mainteance.getTemperature()
+	if data is not None:
+		return {"cpu temperature" : data}
+	else:
+		return Error_message
 
 @app.get("/mainteance/volts")
 async def volts():
-	return {"cpu volts" : mainteance.getVolts()}
-	
+	data = mainteance.getVolts()
+	if data is not None:
+		return {"cpu volts" : data}
+	else:
+		return Error_message
+
 @app.get("/mainteance/clock")
 async def clock():
-	return {"clocks":mainteance.getClock()}
+	data = mainteance.getClock()
+	if data is not None:
+		return {"clocks" : data}
+	else:
+	    return Error_message
 	
 @app.get("/mainteance/display")
 async def display():
-	return {"displays":mainteance.getDisplay()}
+	data = mainteance.getDisplay()
+	if data is not None:
+		return {"displays" : data}
+	else:
+	    return Error_message
 	
 @app.get("/mainteance/cpu")
 async def cpuUsage():
