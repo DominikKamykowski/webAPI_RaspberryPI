@@ -21,7 +21,8 @@ def read_GPS():
 	global GPS_value
 	uart = serial.Serial("/dev/serial0", baudrate=9600, timeout=10)
 	gps = adafruit_gps.GPS(uart, debug=False)
-	gps.send_command(b"PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0")
+	#gps.send_command(b"PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0") #-minimal data
+	gps.send_command(b'PMTK314,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0')
 	gps.send_command(b"PMTK220,1000")
 	last_print = time.monotonic()
 	while True:
@@ -31,29 +32,44 @@ def read_GPS():
 		if current - last_print >= 1.0:
 			last_print = current
 			if not gps.has_fix:
-				longitude = None
-				latitude =  None
-				altitude_m = None
-				timestamp = None
 				continue
-			timestamp = "{}.{}.{} {:02}:{:02}:{:02}".format(
-				gps.timestamp_utc.tm_mon,
-				gps.timestamp_utc.tm_mday,
-				gps.timestamp_utc.tm_year,
-				gps.timestamp_utc.tm_hour,
-				gps.timestamp_utc.tm_min,
-				gps.timestamp_utc.tm_sec,
-				)
-			longitude = gps.longitude
-			latitude = gps.latitude
-			altitude_m = gps.altitude_m
 			GPS_value = {
 				"GPS" : 
 				{
-					"timestamp": timestamp,
-					"longtitude": longitude,
-					"latitude": latitude,
-					"altitude": altitude_m
+					"timestamp UTC": "{}.{}.{} {:02}:{:02}:{:02}".format(
+					gps.timestamp_utc.tm_mon,
+					gps.timestamp_utc.tm_mday,
+					gps.timestamp_utc.tm_year,
+					gps.timestamp_utc.tm_hour,
+					gps.timestamp_utc.tm_min,
+					gps.timestamp_utc.tm_sec,
+					),
+					"coordinates":
+					{
+						"longtitude": gps.longitude,
+						"latitude": gps.latitude,
+						"altitude": gps.altitude_m
+					},
+					"coordinates precise":
+					{
+						"longtitude": "{:2.0f}{:2.4f}".format(gps.longitude_degrees, gps.longitude_minutes),
+						"latitude": "{:2.0f}{:2.4f}".format(gps.latitude_degrees, gps.latitude_minutes)
+					},
+					
+					"speed": gps.speed_knots*0.51444,
+					"fix data":
+					{
+						"fix quality": gps.fix_quality,
+						"fix quality 3d": gps.fix_quality_3d,
+					},
+					"message number": gps.mess_num,
+					"satellites data":
+					{
+						"satelites number": gps.satellites,
+						"satelites details": gps.sats,
+					},
+					#"raw":gps
+					
 				}
 			}
 
