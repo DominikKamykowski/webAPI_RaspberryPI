@@ -23,17 +23,17 @@ class Mainteance:
         
     def getClock(self):
         clockData = {}
-        clockData.update({'ARM cores' : vc.measure_clock('arm')})
-        clockData.update({'VC4 scaler cores' : vc.measure_clock('core')})
-        clockData.update({'Image Signal Processor' : vc.measure_clock('isp')})
-        clockData.update({'3D block' : vc.measure_clock('v3d')})
-        clockData.update({'UART' : vc.measure_clock('uart')})
-        clockData.update({'pwm' : vc.measure_clock('pwm')})
-        clockData.update({'emmc' : vc.measure_clock('emmc')})
-        clockData.update({'Pixel valve' : vc.measure_clock('pixel')})
-        clockData.update({'Analogue video encoder' : vc.measure_clock('vec')})
-        clockData.update({'HDMI' : vc.measure_clock('hdmi')})
-        clockData.update({'Display Peripheral Interface' : vc.measure_clock('dpi')})
+        clockData.update({"ARM cores" : vc.measure_clock('arm')})
+        clockData.update({"VC4 scaler cores" : vc.measure_clock('core')})
+        clockData.update({"Image Signal Processor" : vc.measure_clock('isp')})
+        clockData.update({"3D block" : vc.measure_clock('v3d')})
+        clockData.update({"UART" : vc.measure_clock('uart')})
+        clockData.update({"pwm" : vc.measure_clock('pwm')})
+        clockData.update({"emmc" : vc.measure_clock('emmc')})
+        clockData.update({"Pixel valve" : vc.measure_clock('pixel')})
+        clockData.update({"Analogue video encoder" : vc.measure_clock('vec')})
+        clockData.update({"HDMI" : vc.measure_clock('hdmi')})
+        clockData.update({"Display Peripheral Interface" : vc.measure_clock('dpi')})
         return clockData
 
     def getDisplay(self):

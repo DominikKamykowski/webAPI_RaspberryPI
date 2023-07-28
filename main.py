@@ -4,7 +4,12 @@ import threading
 import time
 import board
 import busio
+import adafruit_gps
 from adafruit_bme280 import basic as adafruit_bme280
+
+import serial
+
+
 
 app = FastAPI()
 mainteance = Mainteance()
@@ -13,22 +18,45 @@ GPS_value = None
 Error_message = {"Error message": "Błąd pobrania danych z systemu"}
 
 def read_GPS():
-    global GPS_value
-    while True:
-        longtitude = None
-        latitude =  None
-        altitude = None
+	global GPS_value
+	uart = serial.Serial("/dev/serial0", baudrate=9600, timeout=10)
+	gps = adafruit_gps.GPS(uart, debug=False)
+	gps.send_command(b"PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0")
+	gps.send_command(b"PMTK220,1000")
+	last_print = time.monotonic()
+	while True:
+		gps.update()
+		current = time.monotonic()
+		time.sleep(0.4)
+		if current - last_print >= 1.0:
+			last_print = current
+			if not gps.has_fix:
+				longitude = None
+				latitude =  None
+				altitude_m = None
+				timestamp = None
+				continue
+			timestamp = "{}.{}.{} {:02}:{:02}:{:02}".format(
+				gps.timestamp_utc.tm_mon,
+				gps.timestamp_utc.tm_mday,
+				gps.timestamp_utc.tm_year,
+				gps.timestamp_utc.tm_hour,
+				gps.timestamp_utc.tm_min,
+				gps.timestamp_utc.tm_sec,
+				)
+			longitude = gps.longitude
+			latitude = gps.latitude
+			altitude_m = gps.altitude_m
+			GPS_value = {
+				"GPS" : 
+				{
+					"timestamp": timestamp,
+					"longtitude": longitude,
+					"latitude": latitude,
+					"altitude": altitude_m
+				}
+			}
 
-        GPS_value = {
-            "GPS" : 
-	        {
-		        "longtitude": longtitude,
-                "latitude": latitude,
-                "altitude": altitude
-	        }
-        }
-
-        time.sleep(1)
 
 def read_sensor():
     global sensor_value
@@ -43,7 +71,7 @@ def read_sensor():
         sensor_value = {
             "BME280" : 
 	        {
-		        "temperature": temperature,
+		"temperature": temperature,
                 "humidity": humidity,
                 "pressure": pressure
 	        }
