@@ -26,7 +26,7 @@ def read_GPS():
         GPS_value = {
             "GPS" : 
 	        {
-		        "longtitude": longtitude,
+		"longtitude": longtitude,
                 "latitude": latitude,
                 "altitude": altitude
 	        }
